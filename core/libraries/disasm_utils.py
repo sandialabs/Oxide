@@ -187,7 +187,7 @@ def disassemble_wcap(file_size, data, header, tool_insns) -> Optional[dict]:
                     cap.mode = capstone.CS_MODE_THUMB
                     insn = next(cap.disasm(data[offset:], offset, 1))
                     cap.mode = save_mode
-            except (StopIteration, ctypes.ArgumentError):
+            except (StopIteration, ctypes.ArgumentError, capstone.CsError):
                 # restore mode for next instruction
                 save_mode = cap.mode
                 logger.debug("bad decode at offset %s bytes %s", offset,
@@ -246,97 +246,97 @@ def get_eflag_name(eflag: int) -> str:
 
         reference code: https://github.com/capstone-engine/capstone/blob/master/bindings/python/test_x86.py#L22
     """
-    if eflag == X86_EFLAGS_UNDEFINED_OF:
+    if eflag == capstone.x86.X86_EFLAGS_UNDEFINED_OF:
         return "UNDEF_OF"
-    elif eflag == X86_EFLAGS_UNDEFINED_SF:
+    elif eflag == capstone.x86.X86_EFLAGS_UNDEFINED_SF:
         return "UNDEF_SF"
-    elif eflag == X86_EFLAGS_UNDEFINED_ZF:
+    elif eflag == capstone.x86.X86_EFLAGS_UNDEFINED_ZF:
         return "UNDEF_ZF"
-    elif eflag == X86_EFLAGS_MODIFY_AF:
+    elif eflag == capstone.x86.X86_EFLAGS_MODIFY_AF:
         return "MOD_AF"
-    elif eflag == X86_EFLAGS_UNDEFINED_PF:
+    elif eflag == capstone.x86.X86_EFLAGS_UNDEFINED_PF:
         return "UNDEF_PF"
-    elif eflag == X86_EFLAGS_MODIFY_CF:
+    elif eflag == capstone.x86.X86_EFLAGS_MODIFY_CF:
         return "MOD_CF"
-    elif eflag == X86_EFLAGS_MODIFY_SF:
+    elif eflag == capstone.x86.X86_EFLAGS_MODIFY_SF:
         return "MOD_SF"
-    elif eflag == X86_EFLAGS_MODIFY_ZF:
+    elif eflag == capstone.x86.X86_EFLAGS_MODIFY_ZF:
         return "MOD_ZF"
-    elif eflag == X86_EFLAGS_UNDEFINED_AF:
+    elif eflag == capstone.x86.X86_EFLAGS_UNDEFINED_AF:
         return "UNDEF_AF"
-    elif eflag == X86_EFLAGS_MODIFY_PF:
+    elif eflag == capstone.x86.X86_EFLAGS_MODIFY_PF:
         return "MOD_PF"
-    elif eflag == X86_EFLAGS_UNDEFINED_CF:
+    elif eflag == capstone.x86.X86_EFLAGS_UNDEFINED_CF:
         return "UNDEF_CF"
-    elif eflag == X86_EFLAGS_MODIFY_OF:
+    elif eflag == capstone.x86.X86_EFLAGS_MODIFY_OF:
         return "MOD_OF"
-    elif eflag == X86_EFLAGS_RESET_OF:
+    elif eflag == capstone.x86.X86_EFLAGS_RESET_OF:
         return "RESET_OF"
-    elif eflag == X86_EFLAGS_RESET_CF:
+    elif eflag == capstone.x86.X86_EFLAGS_RESET_CF:
         return "RESET_CF"
-    elif eflag == X86_EFLAGS_RESET_DF:
+    elif eflag == capstone.x86.X86_EFLAGS_RESET_DF:
         return "RESET_DF"
-    elif eflag == X86_EFLAGS_RESET_IF:
+    elif eflag == capstone.x86.X86_EFLAGS_RESET_IF:
         return "RESET_IF"
-    elif eflag == X86_EFLAGS_TEST_OF:
+    elif eflag == capstone.x86.X86_EFLAGS_TEST_OF:
         return "TEST_OF"
-    elif eflag == X86_EFLAGS_TEST_SF:
+    elif eflag == capstone.x86.X86_EFLAGS_TEST_SF:
         return "TEST_SF"
-    elif eflag == X86_EFLAGS_TEST_ZF:
+    elif eflag == capstone.x86.X86_EFLAGS_TEST_ZF:
         return "TEST_ZF"
-    elif eflag == X86_EFLAGS_TEST_PF:
+    elif eflag == capstone.x86.X86_EFLAGS_TEST_PF:
         return "TEST_PF"
-    elif eflag == X86_EFLAGS_TEST_CF:
+    elif eflag == capstone.x86.X86_EFLAGS_TEST_CF:
         return "TEST_CF"
-    elif eflag == X86_EFLAGS_RESET_SF:
+    elif eflag == capstone.x86.X86_EFLAGS_RESET_SF:
         return "RESET_SF"
-    elif eflag == X86_EFLAGS_RESET_AF:
+    elif eflag == capstone.x86.X86_EFLAGS_RESET_AF:
         return "RESET_AF"
-    elif eflag == X86_EFLAGS_RESET_TF:
+    elif eflag == capstone.x86.X86_EFLAGS_RESET_TF:
         return "RESET_TF"
-    elif eflag == X86_EFLAGS_RESET_NT:
+    elif eflag == capstone.x86.X86_EFLAGS_RESET_NT:
         return "RESET_NT"
-    elif eflag == X86_EFLAGS_PRIOR_OF:
+    elif eflag == capstone.x86.X86_EFLAGS_PRIOR_OF:
         return "PRIOR_OF"
-    elif eflag == X86_EFLAGS_PRIOR_SF:
+    elif eflag == capstone.x86.X86_EFLAGS_PRIOR_SF:
         return "PRIOR_SF"
-    elif eflag == X86_EFLAGS_PRIOR_ZF:
+    elif eflag == capstone.x86.X86_EFLAGS_PRIOR_ZF:
         return "PRIOR_ZF"
-    elif eflag == X86_EFLAGS_PRIOR_AF:
+    elif eflag == capstone.x86.X86_EFLAGS_PRIOR_AF:
         return "PRIOR_AF"
-    elif eflag == X86_EFLAGS_PRIOR_PF:
+    elif eflag == capstone.x86.X86_EFLAGS_PRIOR_PF:
         return "PRIOR_PF"
-    elif eflag == X86_EFLAGS_PRIOR_CF:
+    elif eflag == capstone.x86.X86_EFLAGS_PRIOR_CF:
         return "PRIOR_CF"
-    elif eflag == X86_EFLAGS_PRIOR_TF:
+    elif eflag == capstone.x86.X86_EFLAGS_PRIOR_TF:
         return "PRIOR_TF"
-    elif eflag == X86_EFLAGS_PRIOR_IF:
+    elif eflag == capstone.x86.X86_EFLAGS_PRIOR_IF:
         return "PRIOR_IF"
-    elif eflag == X86_EFLAGS_PRIOR_DF:
+    elif eflag == capstone.x86.X86_EFLAGS_PRIOR_DF:
         return "PRIOR_DF"
-    elif eflag == X86_EFLAGS_TEST_NT:
+    elif eflag == capstone.x86.X86_EFLAGS_TEST_NT:
         return "TEST_NT"
-    elif eflag == X86_EFLAGS_TEST_DF:
+    elif eflag == capstone.x86.X86_EFLAGS_TEST_DF:
         return "TEST_DF"
-    elif eflag == X86_EFLAGS_RESET_PF:
+    elif eflag == capstone.x86.X86_EFLAGS_RESET_PF:
         return "RESET_PF"
-    elif eflag == X86_EFLAGS_PRIOR_NT:
+    elif eflag == capstone.x86.X86_EFLAGS_PRIOR_NT:
         return "PRIOR_NT"
-    elif eflag == X86_EFLAGS_MODIFY_TF:
+    elif eflag == capstone.x86.X86_EFLAGS_MODIFY_TF:
         return "MOD_TF"
-    elif eflag == X86_EFLAGS_MODIFY_IF:
+    elif eflag == capstone.x86.X86_EFLAGS_MODIFY_IF:
         return "MOD_IF"
-    elif eflag == X86_EFLAGS_MODIFY_DF:
+    elif eflag == capstone.x86.X86_EFLAGS_MODIFY_DF:
         return "MOD_DF"
-    elif eflag == X86_EFLAGS_MODIFY_NT:
+    elif eflag == capstone.x86.X86_EFLAGS_MODIFY_NT:
         return "MOD_NT"
-    elif eflag == X86_EFLAGS_MODIFY_RF:
+    elif eflag == capstone.x86.X86_EFLAGS_MODIFY_RF:
         return "MOD_RF"
-    elif eflag == X86_EFLAGS_SET_CF:
+    elif eflag == capstone.x86.X86_EFLAGS_SET_CF:
         return "SET_CF"
-    elif eflag == X86_EFLAGS_SET_DF:
+    elif eflag == capstone.x86.X86_EFLAGS_SET_DF:
         return "SET_DF"
-    elif eflag == X86_EFLAGS_SET_IF:
+    elif eflag == capstone.x86.X86_EFLAGS_SET_IF:
         return "SET_IF"
     else: 
         return None
@@ -405,7 +405,7 @@ def dump_arm64(insn, instruction) -> None:
         instruction['write-back'] = False
 
     instruction['code-condition'] = None
-    if insn.cc not in [ARM64_CC_AL, ARM64_CC_INVALID]:
+    if insn.cc not in [capstone.arm64.ARM64_CC_AL, capstone.arm64.ARM64_CC_INVALID]:
         instruction['code-condition'] = insn.cc
 
     if insn.update_flags:
@@ -534,15 +534,15 @@ def dump_arm64_operands(insn) -> dict:
         for i in insn.operands:
             c += 1
             operands['operand_%d' % c] = {}
-            if i.type == capstone.arm.ARM64_OP_REG:
+            if i.type == capstone.arm64.ARM64_OP_REG:
                 operands['operand_%d' % c]['type.reg'] = insn.reg_name(i.reg)
-            if i.type == capstone.arm.ARM64_OP_IMM:
+            if i.type == capstone.arm64.ARM64_OP_IMM:
                 operands['operand_%d' % c]['type.imm'] = i.imm
-            if i.type == capstone.arm.ARM64_OP_CIMM:
+            if i.type == capstone.arm64.ARM64_OP_CIMM:
                 operands['operand_%d' % c]['type.c_imm'] = i.imm
-            if i.type == capstone.arm.ARM64_OP_FP:
+            if i.type == capstone.arm64.ARM64_OP_FP:
                 operands['operand_%d' % c]['type.fp'] = i.fp
-            if i.type == capstone.arm.ARM64_OP_MEM:
+            if i.type == capstone.arm64.ARM64_OP_MEM:
                 operands['operand_%d' % c]['type.mem'] = {}
                 if i.mem.base != 0:
                     operands['operand_%d' % c]['type.mem']['base'] = insn.reg_name(i.mem.base)
@@ -550,30 +550,30 @@ def dump_arm64_operands(insn) -> dict:
                     operands['operand_%d' % c]['type.mem']['index'] = insn.reg_name(i.mem.index)
                 if i.mem.disp != 0:
                     operands['operand_%d' % c]['type.mem']['displacement'] = i.mem.disp
-            if i.type == capstone.arm.ARM64_OP_REG_MRS:
+            if i.type == capstone.arm64.ARM64_OP_REG_MRS:
                 operands['operand_%d' % c]['reg_mrs'] = i.reg
-            if i.type == capstone.arm.ARM64_OP_REG_MSR:
+            if i.type == capstone.arm64.ARM64_OP_REG_MSR:
                 operands['operand_%d' % c]['reg_msr'] = i.reg
-            if i.type == capstone.arm.ARM64_OP_PSTATE:
+            if i.type == capstone.arm64.ARM64_OP_PSTATE:
                 operands['operand_%d' % c]['pstate'] = i.pstate
-            if i.type == capstone.arm.ARM64_OP_SYS:
+            if i.type == capstone.arm64.ARM64_OP_SYS:
                 operands['operand_%d' % c]['sys'] = i.sys
-            if i.type == capstone.arm.ARM64_OP_PREFETCH:
+            if i.type == capstone.arm64.ARM64_OP_PREFETCH:
                 operands['operand_%d' % c]['prefetch'] = i.prefetch
-            if i.type == capstone.arm.ARM64_OP_BARRIER:
+            if i.type == capstone.arm64.ARM64_OP_BARRIER:
                 operands['operand_%d' % c]['barrier'] = i.barrier
 
-            if i.shift.type != capstone.arm.ARM64_SFT_INVALID and i.shift.value:
+            if i.shift.type != capstone.arm64.ARM64_SFT_INVALID and i.shift.value:
                 operands['operand_%d' % c]['shift.type'] = i.shift.type
                 operands['operand_%d' % c]['shift.value'] = i.shift.value
 
-            if i.ext != capstone.arm.ARM64_EXT_INVALID:
+            if i.ext != capstone.arm64.ARM64_EXT_INVALID:
                 operands['operand_%d' % c]['ext'] = i.ext
 
-            if i.vas != capstone.arm.ARM64_VAS_INVALID:
+            if i.vas != capstone.arm64.ARM64_VAS_INVALID:
                 operands['operand_%d' % c]['vector_arrangement'] = i.vas
 
-            if i.vess != capstone.arm.ARM64_VESS_INVALID:
+            if i.vess != capstone.arm64.ARM64_VESS_INVALID:
                 operands['operand_%d' % c]['vector_elem_size'] = i.vess
 
             if i.vector_index != -1:

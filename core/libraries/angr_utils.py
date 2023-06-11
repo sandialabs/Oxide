@@ -119,6 +119,8 @@ def init_angr_project(file_test, header_interface):
     claripy_logger.setLevel(50)
     pyvex_logger = logging.getLogger("pyvex.lifting.libvex")
     pyvex_logger.setLevel(50)
+    pyvex_logger = logging.getLogger("pyvex.lifting.util")
+    pyvex_logger.setLevel(50)
     identifier_logger = logging.getLogger("angr.analyses.identifier.identify")
     identifier_logger.setLevel(50)
     return p
@@ -208,7 +210,7 @@ def process_cfg(cfg, header_interface):
                     insn_str = inst.insn.mnemonic + ("  " if inst.insn.op_str != '' else "") + inst.insn.op_str
                     # Save instruction to list, and relate to basic block offset
                     output_map["instructions"][offset] = insn_str
-                    members.append([offset, insn_str])
+                    members.append((offset, insn_str))
             except KeyError:
                 logger.debug("Decode error in capstone instructions")
                 continue

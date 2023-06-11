@@ -148,8 +148,15 @@ def extract(file_test, header):
     """
     start = time.time()
 
-    r2 = r2pipe.open(file_test, flags=["-2"])
-    r2.cmd("e anal.jmptbl=1")
+    try:
+        # disable stderr flags=["-2"]
+        r2 = r2pipe.open(file_test, flags=['-2'])
+    except Exception:  # Radare does not use custom exception
+        print('r2pipe exception')
+        return {}
+
+    # r2.cmd("e anal.jmptbl=1")  # this is enabled by default
+    # https://r2wiki.readthedocs.io/en/latest/options/e/values-that-e-can-modify/anal/
 
     # Perform full analysis in radare2
     r2.cmd("aaa")
@@ -166,9 +173,10 @@ def extract(file_test, header):
         logger.info("File Sample is of unknown format, Radare returning empty output.")
         return None
 
+    # Product json, then parse as json into object
     output = r2.cmdj("aflj")
 
-    if output is None:
+    if not output:
         logging.info("Radare produced no output.")
         return None
 
@@ -177,6 +185,10 @@ def extract(file_test, header):
         # Navigate to function, analyze function, retrieve control flow graph
         r2.cmd("s " + str(fun["offset"]))
         logger.debug("analyzing %s" % fun["offset"])
+
+        # Relocatables have offset 0. Skip these functions
+        if fun["offset"] == 0:
+            continue
 
         r2.cmd("af")
         local_cfg = r2.cmdj("agj")

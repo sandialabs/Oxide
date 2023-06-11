@@ -19,7 +19,7 @@ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE. 
+THE SOFTWARE.
 """
 
 DESC = "This module is a source module that handles the metadata when importing files."
@@ -45,6 +45,7 @@ def process(oid, opts):
     logger.debug("Processing file %s", oid)
     import_time = int(time.time())
     import_name = os.path.basename(opts["file_location"])  # strip dir from name
+    original_path = os.path.abspath(opts["file_location"])
     file_stat   = opts["stat"]
     size        = file_stat["size"]
 
@@ -56,14 +57,18 @@ def process(oid, opts):
     # If file info doesn't exist create new
     if not data:
         metadata = {import_time: {import_name: file_stat}}
-        data = {"metadata": metadata, "names": set([import_name]), "size": size}
-
-    # If data already exists append
+        data = {"metadata": metadata, "names": set([import_name]),
+                "original_paths": set([original_path]), "size": size
+               }
     else:
+        # If data already exists append
         if "size" not in data:
             data["size"] = size
         data["metadata"][import_time] = {import_name: file_stat}
         data["names"].add(import_name)
+        if "original_paths" not in data:
+            data["original_paths"] = set()
+        data["original_paths"].add(original_path)
 
     api.store(NAME, oid, data, opts)
 
